@@ -42,8 +42,6 @@ $(document).ready(function() {
     });
   }
 
-  listStudents();
-
   $(document).on("click", "#list", function() {
     listStudents();
   });
@@ -74,5 +72,7 @@ $(document).ready(function() {
     });
     listStudents();
   });
+
+  listStudents();
 });
 
