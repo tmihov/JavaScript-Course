@@ -1,25 +1,22 @@
-
 $(document).ready(function() {
   "use strict";
-
-  var list = [];
 
   function getStudents(cb) {
     $.ajax({
       url: "http://localhost:3030/students",
       type: "GET"
-    }).done(function(data) {
-      cb(data);
-    });
+    }).done(cb);
   }
 
-  function listStudents(list) {
-    var templateSource = $("#table-template").html(),
-          template = Handlebars.compile(templateSource),
-          tableHTML = template({
-            list: list
-          });
-      $("#table").html(tableHTML);
+  function listStudents() {
+    getStudents(function(data) {
+      var templateSource = $("#table-template").html(),
+            template = Handlebars.compile(templateSource),
+            tableHTML = template({
+              list: data
+            });
+        $("#table").html(tableHTML);
+    });
   }
 
   function addStudent(student) {
@@ -35,9 +32,7 @@ $(document).ready(function() {
     $.ajax({
       url: "http://localhost:3030/student/" + facultyNumber,
       type: "GET",
-    }).done(function(data) {
-      cb(data);
-    });
+    }).done(cb);
   }
 
   function deleteStudent(facultyNumber) {
@@ -47,16 +42,10 @@ $(document).ready(function() {
     });
   }
 
-  getStudents(function(data){
-      list = data;
-      listStudents(list);
-    });
+  listStudents();
 
   $(document).on("click", "#list", function() {
-    getStudents(function(data){
-      list = data;
-      listStudents(list);
-    });
+    listStudents();
   });
 
   $(document).on("click", "#create", function() {
@@ -69,11 +58,13 @@ $(document).ready(function() {
       courses: courses
     };
     addStudent(student);
+    listStudents();
   });
 
   $(document).on("click", "#delete", function() {
     var facNum = $("#faculty-number").val();
     deleteStudent(facNum);
+    listStudents();
   });
 
   $(document).on("click", "#update", function() {
@@ -81,6 +72,7 @@ $(document).ready(function() {
       $("#name").val(student.name);
       $("#courses").val(student.courses);
     });
+    listStudents();
   });
 });
 
