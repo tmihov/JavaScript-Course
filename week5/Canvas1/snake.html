@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Snake!</title>
+	<style type="text/css">
+	#snake {
+		border: 1px solid;
+	}
+	</style>
+</head>
+<body>
+	<canvas id="snake" width="300" height="300" tabindex="1"></canvas>
+	<script type="text/javascript">
+		var c = document.getElementById("snake");
+		var ctx = c.getContext("2d");
+		var canvasWidth = document.getElementById("snake").width;
+		var canvasHeight = document.getElementById("snake").height;
+
+		var snake = (function(ctx) {
+			var body = [];
+			var head = new Tile(4, 0, 10, "green", ctx);
+			var direction = "right";
+			var grow = false;
+
+			[1, 2, 3].forEach(function(i) {
+				body.push(new Tile(i, 0, 10, "green", ctx));
+			});
+
+			body.push(head);
+
+			var print = function() {
+				body.forEach(function(tile) {
+					tile.print();
+				});
+			}
+
+			var move = function() {
+				switch(direction) {
+					case "left": var new_head = new Tile(head.x - 1, head.y , 10, "green", ctx);break;
+					case "up": var new_head = new Tile(head.x, head.y - 1, 10, "green", ctx);break;
+					case "right": var new_head = new Tile(head.x + 1, head.y , 10, "green", ctx);break;
+					case "down": var new_head = new Tile(head.x, head.y + 1 , 10, "green", ctx);break;
+				}
+				body.push(new_head);
+				head = new_head;
+				if(grow === true) {
+					grow = false;
+				} else {
+					body.shift();
+				}
+			}
+
+			var ate = function() {
+				if(food.isEaten(head.x, head.y) === true) {
+					grow = true;
+				}
+			}
+
+			var newDirection = function(key) {
+				switch(key.keyCode) {
+					case 37: direction = "left";break;
+					case 38: direction = "up";break;
+					case 39: direction = "right";break;
+					case 40: direction = "down";break;
+				}
+			}
+
+			var isDead = function() {
+
+			}
+
+			return {
+				print: print,
+				move: move,
+				newDirection: newDirection,
+				ate: ate,
+				isDead: isDead
+			}
+		}(ctx));
+
+		var food = (function(ctx) {
+			x = Math.floor((Math.random() * (canvasWidth - 10) / 10) + 1);
+			y = Math.floor((Math.random() * (canvasHeight - 10) / 10) + 1);
+			foodTile = new Tile(x, y, 10, "red", ctx);
+
+			var print = function() {
+				foodTile.print();
+			}
+
+			var newFood = function() {
+				x = Math.floor((Math.random() * (canvasWidth - 10) / 10) + 1);
+				y = Math.floor((Math.random() * (canvasHeight - 10) / 10) + 1);
+				foodTile = new Tile(x, y, 10, "red", ctx);
+			}
+
+			var isEaten = function(xS, yS) {
+				if(x === xS && y === yS) {
+					newFood();
+					return true;
+				}
+				return false;
+			}
+
+			return {
+				print: print,
+				newFood: newFood,
+				isEaten: isEaten,
+			}
+		}(ctx));
+
+
+		function Tile(x, y, size, color, ctx) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.ctx = ctx;
+			this.color = color;
+
+			this.print = function() {
+				this.ctx.fillStyle = color;
+				this.ctx.fillRect(this.x * this.size, this.y * this.size, this.size, this.size);
+			}
+		}
+
+		setInterval(function() {
+			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+			snake.move();
+			snake.ate();
+			food.print();
+			snake.print();
+		}, 100);
+		
+		c.addEventListener("keydown", snake.newDirection, true);
+	</script>
+	<!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>-->
+</body>
+</html>
