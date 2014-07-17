@@ -2,6 +2,6 @@
 path = week2/exam
 url = git@github.com:tmihov/JavaScript-Exam.git
 
-[submodule "week6/2-Multiplayer-Pong"]
-path = week6/2-Multiplayer-Pong
+[submodule "week6/1-Multiplayer-Snake"]
+path = week6/1-Multiplayer-Snake
 url = git@github.com:tmihov/Snake.git
