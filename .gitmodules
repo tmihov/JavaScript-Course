@@ -5,3 +5,7 @@ url = git@github.com:tmihov/JavaScript-Exam.git
 [submodule "week6/1-Multiplayer-Snake"]
 path = week6/1-Multiplayer-Snake
 url = git@github.com:tmihov/Snake.git
+
+[submodule "exam2"]
+path = exam2
+url = git@github.com:tmihov/JavaScript-Exam2.git
